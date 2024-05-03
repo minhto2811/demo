@@ -81,4 +81,22 @@ public class MyDatabase extends SQLiteOpenHelper {
     }
 
 
+    public ArrayList<Contact> filter(String query) {
+        ArrayList<Contact> contacts = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM Contact_MaSV WHERE NAME LIKE ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{"%"+query+"%"});
+        if (cursor.moveToFirst()) {
+            do {
+                Contact contact = new Contact();
+                contact.setId(cursor.getInt(0));
+                contact.setName(cursor.getString(1));
+                contact.setPhone(cursor.getString(2));
+                contacts.add(contact);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return contacts;
+    }
 }

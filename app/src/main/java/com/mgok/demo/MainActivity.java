@@ -2,6 +2,8 @@ package com.mgok.demo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -56,6 +58,27 @@ public class MainActivity extends AppCompatActivity implements ContactOnClick, V
         adapter = new ContactAdapter(this);
         binding.rcvContact.setAdapter(adapter);
         binding.fabAdd.setOnClickListener(this);
+        binding.edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    ArrayList<Contact> list = database.filter(s.toString());
+                    adapter.setData(list);
+                } else {
+                    getData();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
